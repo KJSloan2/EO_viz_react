@@ -14,9 +14,11 @@
     "recharts": "^2.12.7",
     "web-vitals": "^2.1.4"
   },
+  "homepage": "https://KJSloan2.github.io/EO_viz_react",
   "scripts": {
+    "predeploy": "npm run build",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "deploy": "gh-pages -d build"
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
