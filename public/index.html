@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid Layout</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <script src="https://unpkg.com/react/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css" />
+  <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.4.0/mapbox-gl-draw.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.4.0/mapbox-gl-draw.css" type="text/css">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="https://unpkg.com/deck.gl@^8.8.0/dist.min.js"></script>
+  <script src='https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js'></script>
+  <script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
+  <link href='https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css' rel='stylesheet' />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Ribbon -->
+    <div class="ribbon">
+        <h1>Landsat Temporal Spectral Analysis - LST & NDVI</h1>
+    </div>
+
+    <div class="content-container">
+        <div class="left">
+            <div class="info_desc">
+                <br>The analysis area is divided into tiles for efficient local processing and rendering. Select a tile to render from the dropdown menu.
+            </div>
+            <div>
+                <br>
+            </div>
+            <div class="info_desc">
+                <br>Learn more about this project on Github
+            </div>
+            <div class=".logo-container">
+                <a href="https://github.com/KJSloan2/EO/tree/main" target="_blank">
+                    <img src="githubLogo.png" alt="Site Logo" style="width: 50px; height: auto;">
+                </a>
+            </div>
+            <h2>Select Tile</h2>
+            <label for="json-selector"></label>
+            <select id="json-selector" style="width: 85%; height: auto;">
+                <option value="./data/allTiles.json">All Tiles</option>
+                <option value="2013_0-0">Tile 0-1</option>
+                <option value="2013_0-1">Tile 0-1</option>
+                <option value="2013_0-2">Tile 0-1</option>
+                <option value="2013_0-3">Tile 0-3</option>
+                <option value="2013_0-4">Tile 0-4</option>
+                <option value="2013_0-5">Tile 0-5</option>
+                <option value="2013_0-6">Tile 0-6</option>
+                <option value="2013_1-0">Tile 1-0</option>
+                <option value="2013_1-1">Tile 1-1</option>
+                <option value="2013_1-2">Tile 1-2</option>
+                <option value="2013_1-3">Tile 1-3</option>
+                <option value="2013_1-4">Tile 1-4</option>
+                <option value="2013_1-5">Tile 1-5</option>
+                <option value="2013_1-6">Tile 1-6</option>
+                <option value="2013_2-0">Tile 2-0</option>
+                <option value="2013_2-1">Tile 2-1</option>
+                <option value="2013_2-2">Tile 2-2</option>
+                <option value="2013_2-3">Tile 2-3</option>
+                <option value="2013_2-4">Tile 2-4</option>
+                <option value="2013_2-5">Tile 2-5</option>
+                <option value="2013_2-6">Tile 2-6</option>
+            </select>
+            <div id="reference_map"></div>
+        </div>
+
+        <!-- Center two blocks with labels -->
+        <div class="center">
+            <div class="label">Mean Land Surface Temperature F&deg (LSTF)</div>
+            <div id="deck-container-lstf">
+                <div>Content</div>
+            </div>
+            <div class="label">Mean Normalized Difference Vegetation Index (NDVI)</div>
+            <div id="deck-container-ndvi"></div>
+        </div>
+
+        <!-- Right column with four blocks and labels -->
+        <div class="right">
+            <div class="label">Land Surface Temperature F&deg (LSTF) Distribution in Tile</div>
+            <div id="chartA"></div>
+            <div class="label">-</div>
+            <div id="chartB"></div>
+            <div class="label">Normalized Difference Vegetation Index (NDVI) Distribution in Tile</div>
+            <div id="chartC"></div>
+            <div class="label">-</div>
+            <div>Right Bottom Block 4</div>
+        </div>
+    </div>
+
+    <!-- Script to handle DeckGL and data loading -->
+    <script src="./deck_lstf.js"></script>
+    <script src="./deck_ndvi.js"></script>
+
+</body>
+</html>
